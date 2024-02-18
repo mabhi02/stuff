@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flask Variable Example</title>
+</head>
+<body>
+
+<!-- Use a data attribute to store the Flask variables -->
+<div id="flask-data" data-variable-a="{{ A|tojson|safe }}" data-variable-b="{{ B|tojson|safe }}"></div>
+
+<script>
+    // Access Flask variables A and B directly in your JavaScript
+    var A = {{ A|tojson|safe }};
+    var B = {{ B|tojson|safe }};
+  
+    // Now you can use A and B in your JavaScript code
+    console.log(A);
+    console.log(B);
+
+    window.location.href = "{{ url_for('/dash') }}";
+
+</script>
+
+<!-- Include your main JavaScript file -->
+<script src="{{ url_for('static', filename='assets/js/dashboard.js') }}"></script>
+
+</body>
+</html>

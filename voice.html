@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hardcoded Quiz with Voice Recorder</title>
+  <style>
+    /* Add your custom CSS styles here */
+    .quiz-form {
+      display: none;
+      margin-top: 20px;
+    }
+
+    #quizSubmittedButton {
+      display: none;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="startQuizButton">
+    <button type="button" onclick="startQuiz()" class="btn btn-primary">Start Quiz</button>
+  </div>
+
+  <h5 class="card-title fw-semibold mb-4">Forms</h5>
+  <div class="card">
+    <div class="card-body">
+      <!-- Hardcoded form with 5 questions -->
+      <form id="dynamicForm1" class="quiz-form">
+        <div class="mb-3">
+          <label for="question1" class="form-label">Question 1</label>
+          <button type="button" onclick="startRecording('question1')" class="btn btn-primary">Record Answer</button>
+          <audio controls id="audioQuestion1"></audio>
+        </div>
+        <button type="button" onclick="nextForm()" class="btn btn-primary">Next</button>
+      </form>
+
+      <!-- Other forms and buttons follow the same structure -->
+
+      <!-- Button to display after quiz submission -->
+      <button id="quizSubmittedButton" class="btn btn-success" onclick="showQuizSubmittedMessage()">Quiz Submitted Successfully</button>
+    </div>
+  </div>
+
+  <script>
+    let currentFormIndex = 1;
+    let mediaRecorder;
+    let recordedChunks = [];
+
+    function startQuiz() {
+      // Hide the start button
+      document.getElementById('startQuizButton').style.display = 'none';
+
+      // Show the first form
+      document.getElementById(`dynamicForm${currentFormIndex}`).style.display = 'block';
+    }
+
+    function nextForm() {
+      // Hide the current form
+      document.getElementById(`dynamicForm${currentFormIndex}`).style.display = 'none';
+
+      // Increment the form index
+      currentFormIndex++;
+
+      // Show the next form
+      if (currentFormIndex <= 5) {
+        document.getElementById(`dynamicForm${currentFormIndex}`).style.display = 'block';
+      } else {
+        // If all forms are completed, show the quizSubmittedButton
+        document.getElementById('quizSubmittedButton').style.display = 'block';
+      }
+    }
+
+    function startRecording(questionId) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function(stream) {
+          mediaRecorder = new MediaRecorder(stream);
+
+          mediaRecorder.ondataavailable = function(e) {
+            if (e.data.size > 0) {
+              recordedChunks.push(e.data);
+            }
+          };
+
+          mediaRecorder.onstop = function() {
+            const audioBlob = new Blob(recordedChunks, { type: 'audio/mp3' });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            document.getElementById(`audio${questionId}`).src = audioUrl;
+          };
+
+          mediaRecorder.start();
+          setTimeout(() => {
+            mediaRecorder.stop();
+          }, 5000); // Set recording time (in milliseconds), adjust as needed
+        })
+        .catch(function(err) {
+          console.log('The following error occurred: ' + err);
+        });
+    }
+
+    function submitQuiz() {
+      // You can implement the logic for submitting the quiz here
+      nextForm(); // Call nextForm to hide the last form and show the button
+    }
+
+    function showQuizSubmittedMessage() {
+      // Display a message or perform actions upon clicking the quizSubmittedButton
+      alert('Quiz Submitted Successfully!');
+    }
+  </script>
+
+</body>
+</html>

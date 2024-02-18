@@ -1,0 +1,17 @@
+Flask-SQLAlchemy
+flask
+openai==0.28.0
+pydub
+SpeechRecognition
+pymupdf
+pinecone-client
+spacy
+sklearn
+langchain==0.0.316
+langchain
+PyPDF2
+googletrans==4.0.0-rc1
+moviepy
+translate
+Flask-Migrate
+numpy

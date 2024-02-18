@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../static/style.css" />
+  <style>
+    #iframeContainer {
+      display: flex;
+      flex-direction: column;
+    }
+
+    iframe {
+      display: none;
+    }
+
+    .visible {
+      display: block;
+    }
+  </style>
+  <style>
+    .quiz-container {
+      display: none;
+    }
+  </style>
+  <title>Quiz App</title>
+</head>
+<body>
+
+  <button class="btn btn-primary" id="startQuiz">Start Final Exam</button>
+  <div id="quiz" class="quiz-container">
+    <form id="quizForm">
+      <label for="q1">Question 1: {{ question1 }}</label>
+      <input type="text" id="q1" name="q1" required><br>
+      <br>
+      <button type="button" class="btn btn-primary" onclick="submitFinallQuiz()">Submit Quiz</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function submitFinallQuiz() {
+      const form = document.getElementById('quizForm');
+      const formData = new FormData(form);
+  
+      const formDataObject = {};
+      formData.forEach((value, key) => {
+        formDataObject[key] = value;
+      });
+  
+      const requestBody = {
+        quiz_id: 'quiz',
+        answers: formDataObject
+      };
+  
+      fetch('/submitFinalquiz', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(requestBody),
+      })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then(data => {
+        if (data.result) {
+          document.getElementById('result').innerHTML = data.result;
+        } else {
+          console.error('Unexpected server response:', data);
+        }
+      })
+      .catch(error => {
+        console.error('Error during quiz submission:', error);
+      });
+    }
+  
+    document.addEventListener('DOMContentLoaded', function() {
+      const startQuizButton = document.getElementById('startQuiz');
+      const quizContainer = document.getElementById('quiz');
+  
+      startQuizButton.addEventListener('click', function() {
+        startQuizButton.style.display = 'none';
+        quizContainer.style.display = 'block';
+      });
+    });
+  </script>
+  
+
+</body>
+</html>

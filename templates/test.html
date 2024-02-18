@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Toggle</title>
+  <link rel="shortcut icon" type="image/png" href="../static/img/logos/favicon.png" />
+  <link rel="stylesheet" href="../static/style.css" />
+  <style>
+    #iframeContainer {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    iframe {
+      display: none;
+    }
+
+    .visible {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <button class="btn btn-primary" style'padding-bottom:0px'; id="toggleButton">Toggle Exams</button>
+  <div id="iframeContainer">
+    <iframe id="iframe1" style='border: none' width="710" height="400" src="http://127.0.0.1:5000/stufff"></iframe>
+    <iframe id="iframe2" style='border: none' width="700" height="400" src="http://127.0.0.1:5000/Final"></iframe>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggleButton = document.getElementById('toggleButton');
+      const iframe1 = document.getElementById('iframe1');
+      const iframe2 = document.getElementById('iframe2');
+
+      toggleButton.addEventListener('click', function () {
+        if (iframe1.classList.contains('visible')) {
+          iframe1.classList.remove('visible');
+          iframe2.classList.add('visible');
+        } else {
+          iframe1.classList.add('visible');
+          iframe2.classList.remove('visible');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
